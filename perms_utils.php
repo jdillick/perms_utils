@@ -2,7 +2,7 @@
 
 namespace hfc\perms_utils;
 
-function content_perms($content_type = FALSE) {
+function content($content_type = FALSE) {
   $all_existing_perms = array_keys(user_permission_get_modules());
   $perms = array();
   foreach ( $all_existing_perms as $perm ) {
@@ -20,7 +20,7 @@ function content_perms($content_type = FALSE) {
   return $perms;
 }
 
-function comment_perms() {
+function comment() {
   return array(
     'administer comments',
     'access comments',
@@ -29,7 +29,7 @@ function comment_perms() {
   );
 }
 
-function admin_ds_perms() {
+function admin_ds() {
   return array(
     'admin_view_modes',
     'admin_fields',
@@ -41,7 +41,7 @@ function admin_ds_perms() {
 /**
  * Give all perms for one or more module
  */
-function module_admin_perms($modules = FALSE) {
+function module_admin($modules = FALSE) {
   // for stuff we don't want to accidentally hand out
   $blacklist = array();
 
@@ -57,15 +57,54 @@ function module_admin_perms($modules = FALSE) {
   return $perm;
 }
 
+function vocabs() {
+  $vocabularies = taxonomy_vocabulary_load_multiple(FALSE);
+  $vocab_perms = array();
+  foreach ( $vocabularies as $vocab ) {
+    $vocab_perms[$vocab->machine_name]['delete'] = $perms['administrator'][] = 'delete terms in ' . $vocab->vid;
+    $vocab_perms[$vocab->machine_name]['edit'] = $perms['administrator'][] = 'edit terms in ' . $vocab->vid;
+  }
+
+  // example vocabulary perm
+  // $perms['content editor'][] = $vocab_perms['product_formats']['edit']; // Edit Terms in Product Formats
+
+  return $vocab_perms;
+}
+
+function webform($access_level) {
+  $perms = array();
+  switch ($access_level){
+    case 'developer':
+      $perms[] = 'access all webform results';
+      $perms[] = 'edit all webform submissions';
+      // No one should have delete for history or auditing
+      // $perms[] = 'delete all webform submissions';
+      // $perms[] = 'delete own webform submissions';
+    case 'content editor':
+      $perms[] = 'access own webform results';
+      $perms[] = 'access own webform submissions';
+      break;
+    default:
+      drupal_set_message(t('@level not valid for @func', array(
+        '@level' => $access_level,
+        '@func' => __FUNCTION__,
+        )
+      ), 'error');
+  }
+
+  return $perms;
+}
+
 function all_the_perms () {
   return array (
   'administer blocks' => 'block',
-  'access all webform results' => 'webform',
-  'access own webform results' => 'webform',
-  'edit all webform submissions' => 'webform',
-  'delete all webform submissions' => 'webform',
-  'access own webform submissions' => 'webform',
-  'delete own webform submissions' => 'webform',
+
+  // 'access all webform results' => 'webform',
+  // 'access own webform results' => 'webform',
+  // 'edit all webform submissions' => 'webform',
+  // 'delete all webform submissions' => 'webform',
+  // 'access own webform submissions' => 'webform',
+  // 'delete own webform submissions' => 'webform',
 
   'administer checkout' => 'commerce_checkout',
   'access checkout' => 'commerce_checkout',
