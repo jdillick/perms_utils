@@ -3,6 +3,15 @@
 namespace hfc\perms_utils;
 
 /**
+ * Given a list of permissions, filter out permissions not present on the site.
+ *
+ * @param array $perms list of perms to filter
+ */
+function filter_inactive_permissions($perms) {
+  return array_intersect($perms, array_keys(user_permission_get_modules()));
+}
+
+/**
  * Give all perms for one or more module
  */
 function module_admin($modules = FALSE) {
@@ -518,6 +527,11 @@ function workbench($access_level) {
   return $perms;
 }
 
+/**
+ * Temporary function... not intended for use.
+ * Meant to help brainstorm dynamic permission utilities.
+ * @todo remove this after we have good functional perm utilities
+ */
 function all_the_perms () {
   return array (
   // 'administer blocks' => 'block',
