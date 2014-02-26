@@ -302,7 +302,7 @@ function shortcut($access_level) {
       $perms[] = 'administer shortcuts';
       $perms[] = 'switch shortcut sets';
 
-    case 'content editor'
+    case 'content editor':
       $perms[] = 'customize shortcut links';
       break;
 
@@ -342,7 +342,7 @@ function views($access_level) {
       $perms[] = 'administer views';
       $perms[] = 'access all views';
 
-      break;
+    break;
     default:
       drupal_set_message(t('@level not valid for @func', array(
         '@level' => $access_level,
