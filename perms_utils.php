@@ -187,6 +187,117 @@ function content_admin($access_level) {
 }
 
 
+/**
+ * Permissions for commerce and commerce related modules
+ * @param  string $access_level
+ * @return array    Array of permissions
+ */
+function commerce($access_level){
+  $perms = array();
+  switch ($access_level){
+    case 'developer':
+      // Checkout
+      $perms[] = 'administer checkout';
+    
+      // Customer
+      $perms[] = 'administer customer profile types';
+      $perms[] = 'administer commerce_customer_profile entities';
+      $perms[] = 'create commerce_customer_profile entities';
+
+      // Line Item
+      $perms[] = 'administer line item types';
+
+      // Order
+      $perms[] = 'administer commerce_order entities';
+      $perms[] = 'configure order settings';
+
+      // Payment
+      $perms[] = 'administer payment methods';
+
+      // Product
+      $perms[] = 'administer product types';
+      $perms[] = 'administer commerce_product entities';
+
+    case 'store admin':
+      // Customer
+      $perms[] = 'view any commerce_customer_profile entity';
+      $perms[] = 'view any commerce_customer_profile entity of bundle billing';
+      $perms[] = 'view any commerce_customer_profile entity of bundle shipping';
+
+      // Discount
+      $perms[] = 'administer commerce discounts';
+
+      // Flat Rate
+      $perms[] = 'administer flat rate services';
+
+      // Line Item
+      $perms[] = 'administer line items';
+
+      // Order
+      $perms[] = 'create commerce_order entities';
+      $perms[] = 'view own commerce_order entities';
+      $perms[] = 'view any commerce_order entity';
+      $perms[] = 'create commerce_order entities of bundle commerce_order';
+      $perms[] = 'view own commerce_order entities of bundle commerce_order';
+      $perms[] = 'view any commerce_order entity of bundle commerce_order';
+
+      // Payment
+      $perms[] = 'administer payments';
+      $perms[] = 'view payments';
+      $perms[] = 'create payments';
+      $perms[] = 'update payments';
+      $perms[] = 'delete payments';
+
+      // Product Pricing UI
+      $perms[] = 'administer product pricing';
+
+      // Shipping
+      $perms[] = 'administer shipping';
+
+      // Tax UI
+      $perms[] = 'administer taxes';
+
+      // Wishlist
+      $perms[] = 'administer wishlists';
+
+    case 'content editor':
+      $perms[] = 'create commerce_product entities';
+      $perms[] = 'view own commerce_product entities';
+      $perms[] = 'view any commerce_product entity';
+      $perms[] = 'create commerce_product entities of bundle product';
+      $perms[] = 'view own commerce_product entities of bundle product';
+      $perms[] = 'view any commerce_product entity of bundle product';
+
+    case 'authenticated user':
+      // Customer
+      $perms[] = 'view own commerce_customer_profile entities';
+      $perms[] = 'create commerce_customer_profile entities of bundle billing';
+      $perms[] = 'view own commerce_customer_profile entities of bundle billing';
+      $perms[] = 'create commerce_customer_profile entities of bundle shipping';
+      $perms[] = 'view own commerce_customer_profile entities of bundle shipping';
+
+      // Wishlist
+      $perms[] = 'view own wishlist';
+
+    case 'anonymous':
+      // Checkout
+      $perms[] = 'access checkout';
+
+      break;
+    default:
+      drupal_set_message(t('@level not valid for @func', array(
+        '@level' => $access_level,
+        '@func' => __FUNCTION__,
+        )
+      ), 'error');
+  }
+
+  return $perms;
+}
+
+
+
+
 /******************************************************************************
  * Begin Permissions by Module
  ******************************************************************************/
@@ -213,6 +324,7 @@ function comment($access_level){
   return $perms;
 }
 
+
 function ds($access_level) {
   $perms = array();
   switch ($access_level){
@@ -220,6 +332,7 @@ function ds($access_level) {
       $perms[] = 'admin_fields';
       $perms[] = 'admin_classes';
       $perms[] = 'admin_display_suite';
+
       break;
     default:
       drupal_set_message(t('@level not valid for @func', array(
@@ -231,6 +344,7 @@ function ds($access_level) {
 
   return $perms;
 }
+
 
 function panels($access_level) {
   $perms = array();
@@ -415,57 +529,57 @@ function all_the_perms () {
   // 'access own webform submissions' => 'webform',
   // 'delete own webform submissions' => 'webform',
 
-  'administer checkout' => 'commerce_checkout',
-  'access checkout' => 'commerce_checkout',
+  // 'administer checkout' => 'commerce_checkout',
+  // 'access checkout' => 'commerce_checkout',
 
-  'administer customer profile types' => 'commerce_customer',
-  'administer commerce_customer_profile entities' => 'commerce_customer',
+  // 'administer customer profile types' => 'commerce_customer',
+  // 'administer commerce_customer_profile entities' => 'commerce_customer',
 
-  'create commerce_customer_profile entities' => 'commerce_customer',
-  'view own commerce_customer_profile entities' => 'commerce_customer',
-  'view any commerce_customer_profile entity' => 'commerce_customer',
-  'create commerce_customer_profile entities of bundle billing' => 'commerce_customer',
-  'view own commerce_customer_profile entities of bundle billing' => 'commerce_customer',
-  'view any commerce_customer_profile entity of bundle billing' => 'commerce_customer',
-  'create commerce_customer_profile entities of bundle shipping' => 'commerce_customer',
-  'view own commerce_customer_profile entities of bundle shipping' => 'commerce_customer',
-  'view any commerce_customer_profile entity of bundle shipping' => 'commerce_customer',
+  // 'create commerce_customer_profile entities' => 'commerce_customer',
+  // 'view own commerce_customer_profile entities' => 'commerce_customer',
+  // 'view any commerce_customer_profile entity' => 'commerce_customer',
+  // 'create commerce_customer_profile entities of bundle billing' => 'commerce_customer',
+  // 'view own commerce_customer_profile entities of bundle billing' => 'commerce_customer',
+  // 'view any commerce_customer_profile entity of bundle billing' => 'commerce_customer',
+  // 'create commerce_customer_profile entities of bundle shipping' => 'commerce_customer',
+  // 'view own commerce_customer_profile entities of bundle shipping' => 'commerce_customer',
+  // 'view any commerce_customer_profile entity of bundle shipping' => 'commerce_customer',
 
-  'administer commerce discounts' => 'commerce_discount',
-  'administer flat rate services' => 'commerce_flat_rate',
-  'administer line item types' => 'commerce_line_item',
-  'administer line items' => 'commerce_line_item',
+  // 'administer commerce discounts' => 'commerce_discount',
+  // 'administer flat rate services' => 'commerce_flat_rate',
+  // 'administer line item types' => 'commerce_line_item',
+  // 'administer line items' => 'commerce_line_item',
 
-  'administer commerce_order entities' => 'commerce_order',
-  'create commerce_order entities' => 'commerce_order',
-  'view own commerce_order entities' => 'commerce_order',
-  'view any commerce_order entity' => 'commerce_order',
-  'create commerce_order entities of bundle commerce_order' => 'commerce_order',
-  'view own commerce_order entities of bundle commerce_order' => 'commerce_order',
-  'view any commerce_order entity of bundle commerce_order' => 'commerce_order',
-  'configure order settings' => 'commerce_order',
+  // 'administer commerce_order entities' => 'commerce_order',
+  // 'create commerce_order entities' => 'commerce_order',
+  // 'view own commerce_order entities' => 'commerce_order',
+  // 'view any commerce_order entity' => 'commerce_order',
+  // 'create commerce_order entities of bundle commerce_order' => 'commerce_order',
+  // 'view own commerce_order entities of bundle commerce_order' => 'commerce_order',
+  // 'view any commerce_order entity of bundle commerce_order' => 'commerce_order',
+  // 'configure order settings' => 'commerce_order',
 
-  'administer payment methods' => 'commerce_payment',
-  'administer payments' => 'commerce_payment',
-  'view payments' => 'commerce_payment',
-  'create payments' => 'commerce_payment',
-  'update payments' => 'commerce_payment',
-  'delete payments' => 'commerce_payment',
-  'administer product types' => 'commerce_product',
-  'administer commerce_product entities' => 'commerce_product',
-  'create commerce_product entities' => 'commerce_product',
-  'view own commerce_product entities' => 'commerce_product',
-  'view any commerce_product entity' => 'commerce_product',
-  'create commerce_product entities of bundle product' => 'commerce_product',
-  'view own commerce_product entities of bundle product' => 'commerce_product',
-  'view any commerce_product entity of bundle product' => 'commerce_product',
+  // 'administer payment methods' => 'commerce_payment',
+  // 'administer payments' => 'commerce_payment',
+  // 'view payments' => 'commerce_payment',
+  // 'create payments' => 'commerce_payment',
+  // 'update payments' => 'commerce_payment',
+  // 'delete payments' => 'commerce_payment',
+  // 'administer product types' => 'commerce_product',
+  // 'administer commerce_product entities' => 'commerce_product',
+  // 'create commerce_product entities' => 'commerce_product',
+  // 'view own commerce_product entities' => 'commerce_product',
+  // 'view any commerce_product entity' => 'commerce_product',
+  // 'create commerce_product entities of bundle product' => 'commerce_product',
+  // 'view own commerce_product entities of bundle product' => 'commerce_product',
+  // 'view any commerce_product entity of bundle product' => 'commerce_product',
 
-  'administer product pricing' => 'commerce_product_pricing_ui',
+  // 'administer product pricing' => 'commerce_product_pricing_ui',
 
-  'administer shipping' => 'commerce_shipping',
-  'administer taxes' => 'commerce_tax_ui',
-  'view own wishlist' => 'commerce_wishlist',
-  'administer wishlists' => 'commerce_wishlist',
+  // 'administer shipping' => 'commerce_shipping',
+  // 'administer taxes' => 'commerce_tax_ui',
+  // 'view own wishlist' => 'commerce_wishlist',
+  // 'administer wishlists' => 'commerce_wishlist',
 
   // 'access contextual links' => 'contextual',
 
