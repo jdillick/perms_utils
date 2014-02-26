@@ -3,6 +3,15 @@
 namespace hfc\perms_utils;
 
 /**
+ * Given a list of permissions, filter out permissions not present on the site.
+ *
+ * @param array $perms list of perms to filter
+ */
+function filter_inactive_permissions($perms) {
+  return array_intersect($perms, array_keys(user_permission_get_modules()));
+}
+
+/**
  * Give all perms for one or more module
  */
 function module_admin($modules = FALSE) {
@@ -93,7 +102,7 @@ function core($access_level) {
       // System
       $perms[] = 'access administration pages';
       $perms[] = 'view the administration theme';
-      
+
       // Path
       $perms[] = 'create url aliases';
 
@@ -102,7 +111,7 @@ function core($access_level) {
 
       // Contextual
       $perms[] = 'access contextual links';
-      
+
       break;
     default:
       drupal_set_message(t('@level not valid for @func', array(
@@ -243,7 +252,7 @@ function panels($access_level) {
       // Buggy :(
       // $perms[] = 'use panels in place editing';
       // $perms[] = 'change layouts in place editing';
-      
+
       $perms[] = 'administer advanced pane settings';
       $perms[] = 'administer panels layouts';
       $perms[] = 'administer panels styles';
@@ -292,7 +301,7 @@ function shortcut($access_level) {
     case 'developer':
       $perms[] = 'administer shortcuts';
       $perms[] = 'switch shortcut sets';
-    
+
     case 'content editor'
       $perms[] = 'customize shortcut links';
       break;
@@ -332,7 +341,7 @@ function views($access_level) {
     case 'developer':
       $perms[] = 'administer views';
       $perms[] = 'access all views';
-      
+
       break;
     default:
       drupal_set_message(t('@level not valid for @func', array(
@@ -375,7 +384,7 @@ function workbench($access_level) {
       $perms[] = 'administer workbench';
       // Workbench tab is crap
       // $perms[] = 'access workbench';
-      
+
       // WB Moderation
       $perms[] = 'administer workbench moderation';
       $perms[] = 'bypass workbench moderation';
@@ -384,7 +393,7 @@ function workbench($access_level) {
 
     case 'content editor':
       $perms[] = 'view all unpublished content';
-      
+
       // WB Moderation
       $perms[] = 'view moderation history';
       $perms[] = 'view moderation messages';
@@ -392,7 +401,7 @@ function workbench($access_level) {
       // $perms[] = 'moderate content from draft to needs_review';
       // $perms[] = 'moderate content from needs_review to draft';
       // $perms[] = 'moderate content from needs_review to published';
-      
+
       break;
     default:
       drupal_set_message(t('@level not valid for @func', array(
@@ -472,7 +481,7 @@ function all_the_perms () {
   // 'access dashboard' => 'dashboard',
 
   // 'administer entity view modes' => 'entity_view_mode',
-  
+
   'administer feeds' => 'feeds',
   'administer feeds_tamper' => 'feeds_tamper',
 
@@ -494,12 +503,12 @@ function all_the_perms () {
   // 'administer menu' => 'menu',
   // 'import or export menu' => 'menu_import',
   // 'administer menu positions' => 'menu_position',
-  
+
   'administer meta tags' => 'metatag',
   'edit meta tags' => 'metatag',
-  
+
   'edit mimemail user settings' => 'mimemail',
-  
+
   // 'administer module filter' => 'module_filter',
 
   // 'bypass node access' => 'node',
@@ -526,14 +535,14 @@ function all_the_perms () {
   // 'create webform content' => 'node',
   // 'delete own webform content' => 'node',
   // 'delete any webform content' => 'node',
-  
+
   // 'administer url aliases' => 'path',
   // 'create url aliases' => 'path',
 
   // 'administer search' => 'search',
   // 'search content' => 'search',
   // 'use advanced search' => 'search',
-  
+
   'administer services' => 'services',
   'get any binary files' => 'services',
   'get own binary files' => 'services',
@@ -550,16 +559,16 @@ function all_the_perms () {
   // 'administer site configuration' => 'system',
   // 'administer themes' => 'system',
   // 'administer software updates' => 'system',
-  
+
   // I don't know what this is?? Didn't add it to anything
   // 'administer actions' => 'system',
-  
+
   // 'access administration pages' => 'system',
   // 'access site in maintenance mode' => 'system',
   // 'view the administration theme' => 'system',
   // 'access site reports' => 'system',
   // 'block IP addresses' => 'system',
-  
+
   // 'administer taxonomy' => 'taxonomy',
   // 'edit terms in 2' => 'taxonomy',
   // 'delete terms in 2' => 'taxonomy',
@@ -567,7 +576,7 @@ function all_the_perms () {
   // 'delete terms in 3' => 'taxonomy',
   // 'edit terms in 1' => 'taxonomy',
   // 'delete terms in 1' => 'taxonomy',
-  
+
   // 'import taxonomy by csv' => 'taxonomy_csv',
   // 'export taxonomy by csv' => 'taxonomy_csv',
 
@@ -579,7 +588,7 @@ function all_the_perms () {
   // 'change own username' => 'user',
   // 'cancel account' => 'user',
   // 'select account cancellation method' => 'user',
-  
+
   // 'administer workbench' => 'workbench',
   // 'access workbench' => 'workbench',
 
@@ -590,7 +599,7 @@ function all_the_perms () {
   // 'administer pathauto' => 'pathauto',
 
   // 'notify of path changes' => 'pathauto',
-  
+
   'administer xmlsitemap' => 'xmlsitemap',
 
   // 'view all unpublished content' => 'workbench_moderation',
@@ -603,14 +612,14 @@ function all_the_perms () {
   // 'moderate content from draft to needs_review' => 'workbench_moderation',
   // 'moderate content from needs_review to draft' => 'workbench_moderation',
   // 'moderate content from needs_review to published' => 'workbench_moderation',
-  
+
   // 'administer views' => 'views',
   // 'access all views' => 'views',
-  
+
   'administer features' => 'features',
   'manage features' => 'features',
   'generate features' => 'features',
-  
+
   'administer rules' => 'rules',
   'bypass rules access' => 'rules',
   'access rules debug' => 'rules',
