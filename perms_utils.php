@@ -205,6 +205,8 @@ function commerce($access_level){
   $perms = array();
   switch ($access_level){
     case 'developer':
+      $perms[] = 'configure store';
+
       // Checkout
       $perms[] = 'administer checkout';
     
@@ -304,6 +306,70 @@ function commerce($access_level){
   return $perms;
 }
 
+/**
+ * Feeds and feeds related modules permissions
+ * @param  string $access_level
+ * @return array    Array of permissions
+ */
+function feeds($access_level) {
+  $perms = array();
+  switch ($access_level){
+    case 'developer':
+      // Feeds
+      $perms[] = 'administer feeds';
+
+      // Tamper
+      $perms[] = 'administer feeds_tamper';
+
+      break;
+    default:
+      drupal_set_message(t('@level not valid for @func', array(
+        '@level' => $access_level,
+        '@func' => __FUNCTION__,
+        )
+      ), 'error');
+  }
+
+  return $perms;
+}
+
+
+function workbench($access_level) {
+  $perms = array();
+  switch ($access_level){
+    case 'developer':
+      $perms[] = 'administer workbench';
+      // Workbench tab is crap
+      // $perms[] = 'access workbench';
+      
+      // WB Moderation
+      $perms[] = 'administer workbench moderation';
+      $perms[] = 'bypass workbench moderation';
+      // $perms[] = 'use workbench_moderation my drafts tab';
+      // $perms[] = 'use workbench_moderation needs review tab';
+
+    case 'content editor':
+      $perms[] = 'view all unpublished content';
+      
+      // WB Moderation
+      $perms[] = 'view moderation history';
+      $perms[] = 'view moderation messages';
+      // @todo needs to be more dynamic based on what states are available
+      // $perms[] = 'moderate content from draft to needs_review';
+      // $perms[] = 'moderate content from needs_review to draft';
+      // $perms[] = 'moderate content from needs_review to published';
+      
+      break;
+    default:
+      drupal_set_message(t('@level not valid for @func', array(
+        '@level' => $access_level,
+        '@func' => __FUNCTION__,
+        )
+      ), 'error');
+  }
+  return $perms;
+}
+
 
 
 
@@ -355,6 +421,46 @@ function ds($access_level) {
 }
 
 
+function ds($access_level) {
+  $perms = array();
+  switch ($access_level){
+    case 'store admin':
+      $perms[] = 'decrypt payment card data';
+
+      break;
+    default:
+      drupal_set_message(t('@level not valid for @func', array(
+        '@level' => $access_level,
+        '@func' => __FUNCTION__,
+        )
+      ), 'error');
+  }
+
+  return $perms;
+}
+
+
+function features($access_level) {
+  $perms = array();
+  switch ($access_level){
+    case 'developer':
+      $perms[] = 'administer features';
+      $perms[] = 'manage features';
+      $perms[] = 'generate features';
+
+      break;
+    default:
+      drupal_set_message(t('@level not valid for @func', array(
+        '@level' => $access_level,
+        '@func' => __FUNCTION__,
+        )
+      ), 'error');
+  }
+
+  return $perms;
+}
+
+
 function panels($access_level) {
   $perms = array();
   switch ($access_level){
@@ -376,6 +482,27 @@ function panels($access_level) {
       // Panels Mini
       $perms[] = 'create mini panels';
       $perms[] = 'administer mini panels';
+      break;
+
+    default:
+      drupal_set_message(t('@level not valid for @func', array(
+        '@level' => $access_level,
+        '@func' => __FUNCTION__,
+        )
+      ), 'error');
+  }
+
+  return $perms;
+}
+
+
+function rules($access_level){
+  $perms = array();
+  switch ($access_level){
+    case 'developer':
+      $perms[] = 'administer rules';
+      $perms[] = 'bypass rules access';
+      $perms[] = 'access rules debug';
       break;
 
     default:
@@ -418,8 +545,89 @@ function shortcut($access_level) {
     
     case 'content editor'
       $perms[] = 'customize shortcut links';
-      break;
 
+      break;
+    default:
+      drupal_set_message(t('@level not valid for @func', array(
+        '@level' => $access_level,
+        '@func' => __FUNCTION__,
+        )
+      ), 'error');
+  }
+  return $perms;
+}
+
+
+function mailsystem($access_level){
+  $perms = array();
+  switch ($access_level){
+    case 'developer':
+      $perms[] = 'administer mailsystem';
+
+      break;
+    default:
+      drupal_set_message(t('@level not valid for @func', array(
+        '@level' => $access_level,
+        '@func' => __FUNCTION__,
+        )
+      ), 'error');
+  }
+  return $perms;
+}
+
+
+function metatag($access_level){
+  $perms = array();
+  switch ($access_level){
+    case 'developer':
+      $perms[] = 'administer meta tags';
+
+    case 'content editor':
+      $perms[] = 'edit meta tags';
+
+      break;
+    default:
+      drupal_set_message(t('@level not valid for @func', array(
+        '@level' => $access_level,
+        '@func' => __FUNCTION__,
+        )
+      ), 'error');
+  }
+  return $perms;
+}
+
+
+function mimemail($access_level){
+  $perms = array();
+  switch ($access_level){
+    case 'developer':
+      $perms[] = 'edit mimemail user settings';
+
+      break;
+    default:
+      drupal_set_message(t('@level not valid for @func', array(
+        '@level' => $access_level,
+        '@func' => __FUNCTION__,
+        )
+      ), 'error');
+  }
+  return $perms;
+}
+
+
+function services($access_level){
+  $perms = array();
+  switch ($access_level){
+    case 'developer':
+      $perms[] = 'administer services';
+      $perms[] = 'get any binary files';
+      $perms[] = 'get own binary files';
+      $perms[] = 'save file information';
+      $perms[] = 'get a system variable';
+      $perms[] = 'set a system variable';
+      $perms[] = 'perform unlimited index queries';
+
+      break;
     default:
       drupal_set_message(t('@level not valid for @func', array(
         '@level' => $access_level,
@@ -491,30 +699,12 @@ function webform($access_level) {
   return $perms;
 }
 
-function workbench($access_level) {
+
+function xmlsitemap($access_level){
   $perms = array();
   switch ($access_level){
     case 'developer':
-      $perms[] = 'administer workbench';
-      // Workbench tab is crap
-      // $perms[] = 'access workbench';
-      
-      // WB Moderation
-      $perms[] = 'administer workbench moderation';
-      $perms[] = 'bypass workbench moderation';
-      // $perms[] = 'use workbench_moderation my drafts tab';
-      // $perms[] = 'use workbench_moderation needs review tab';
-
-    case 'content editor':
-      $perms[] = 'view all unpublished content';
-      
-      // WB Moderation
-      $perms[] = 'view moderation history';
-      $perms[] = 'view moderation messages';
-      // @todo needs to be more dynamic based on what states are available
-      // $perms[] = 'moderate content from draft to needs_review';
-      // $perms[] = 'moderate content from needs_review to draft';
-      // $perms[] = 'moderate content from needs_review to published';
+      $perms[] = 'administer xmlsitemap';
       
       break;
     default:
@@ -526,6 +716,7 @@ function workbench($access_level) {
   }
   return $perms;
 }
+
 
 /**
  * Temporary function... not intended for use.
@@ -601,8 +792,8 @@ function all_the_perms () {
 
   // 'administer entity view modes' => 'entity_view_mode',
   
-  'administer feeds' => 'feeds',
-  'administer feeds_tamper' => 'feeds_tamper',
+  // 'administer feeds' => 'feeds',
+  // 'administer feeds_tamper' => 'feeds_tamper',
 
   // 'administer filters' => 'filter',
   'use text format filtered_html' => 'filter',
@@ -614,19 +805,19 @@ function all_the_perms () {
   'administer forward' => 'forward',
   'override flood control' => 'forward',
 
-  'decrypt payment card data' => 'hfc_commerce_gpg',
+  // 'decrypt payment card data' => 'hfc_commerce_gpg',
 
   // 'administer image styles' => 'image',
-  'administer mailsystem' => 'mailsystem',
+  // 'administer mailsystem' => 'mailsystem',
 
   // 'administer menu' => 'menu',
   // 'import or export menu' => 'menu_import',
   // 'administer menu positions' => 'menu_position',
   
-  'administer meta tags' => 'metatag',
-  'edit meta tags' => 'metatag',
+  // 'administer meta tags' => 'metatag',
+  // 'edit meta tags' => 'metatag',
   
-  'edit mimemail user settings' => 'mimemail',
+  // 'edit mimemail user settings' => 'mimemail',
   
   // 'administer module filter' => 'module_filter',
 
@@ -662,13 +853,13 @@ function all_the_perms () {
   // 'search content' => 'search',
   // 'use advanced search' => 'search',
   
-  'administer services' => 'services',
-  'get any binary files' => 'services',
-  'get own binary files' => 'services',
-  'save file information' => 'services',
-  'get a system variable' => 'services',
-  'set a system variable' => 'services',
-  'perform unlimited index queries' => 'services',
+  // 'administer services' => 'services',
+  // 'get any binary files' => 'services',
+  // 'get own binary files' => 'services',
+  // 'save file information' => 'services',
+  // 'get a system variable' => 'services',
+  // 'set a system variable' => 'services',
+  // 'perform unlimited index queries' => 'services',
 
   // 'administer shortcuts' => 'shortcut',
   // 'customize shortcut links' => 'shortcut',
@@ -711,7 +902,7 @@ function all_the_perms () {
   // 'administer workbench' => 'workbench',
   // 'access workbench' => 'workbench',
 
-  'configure store' => 'commerce',
+  // 'configure store' => 'commerce',
 
   // 'administer fieldgroups' => 'field_group',
 
@@ -719,7 +910,7 @@ function all_the_perms () {
 
   // 'notify of path changes' => 'pathauto',
   
-  'administer xmlsitemap' => 'xmlsitemap',
+  // 'administer xmlsitemap' => 'xmlsitemap',
 
   // 'view all unpublished content' => 'workbench_moderation',
   // 'administer workbench moderation' => 'workbench_moderation',
@@ -735,12 +926,12 @@ function all_the_perms () {
   // 'administer views' => 'views',
   // 'access all views' => 'views',
   
-  'administer features' => 'features',
-  'manage features' => 'features',
-  'generate features' => 'features',
+  // 'administer features' => 'features',
+  // 'manage features' => 'features',
+  // 'generate features' => 'features',
   
-  'administer rules' => 'rules',
-  'bypass rules access' => 'rules',
-  'access rules debug' => 'rules',
+  // 'administer rules' => 'rules',
+  // 'bypass rules access' => 'rules',
+  // 'access rules debug' => 'rules',
 );
 }
