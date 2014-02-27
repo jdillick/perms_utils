@@ -717,6 +717,9 @@ function xmlsitemap($access_level){
   return $perms;
 }
 
+function is_production() {
+  return getenv('ENVTYPE') && ! in_array(getenv('ENVTYPE'), array('production', 'staging'));
+}
 
 /**
  * Temporary function... not intended for use.
