@@ -715,7 +715,7 @@ function xmlsitemap($access_level){
 }
 
 function is_production() {
-  return getenv('ENVTYPE') && ! in_array(getenv('ENVTYPE'), array('production', 'staging'));
+  return getenv('ENVTYPE') && in_array(getenv('ENVTYPE'), array('production', 'staging'));
 }
 
 /**
