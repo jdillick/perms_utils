@@ -253,6 +253,9 @@ function commerce($access_level){
       // Wishlist
       $perms[] = 'administer wishlists';
 
+      // Files / Licenses
+      $perms[] = 'bypass license control';
+
     case 'store order manager':
       // Order
       $perms[] = 'create commerce_order entities';
@@ -261,6 +264,9 @@ function commerce($access_level){
       $perms[] = 'create commerce_order entities of bundle commerce_order';
       $perms[] = 'view own commerce_order entities of bundle commerce_order';
       $perms[] = 'view any commerce_order entity of bundle commerce_order';
+
+      // Files / Licenses
+      $perms[] = 'administer licenses';
 
       // Payment
       $perms[] = 'view payments';
@@ -286,6 +292,9 @@ function commerce($access_level){
 
       // Wishlist
       $perms[] = 'view own wishlist';
+
+      // Files / Licenses
+      $perms[] = 'view own licenses';
 
     case 'anonymous':
       // Checkout
@@ -751,6 +760,9 @@ function all_the_perms () {
   // 'view any commerce_customer_profile entity of bundle shipping' => 'commerce_customer',
 
   // 'administer commerce discounts' => 'commerce_discount',
+  // 'bypass license control' => 'commerce_file',
+  // 'administer licenses' => 'commerce_license',
+  // 'view own licenses' => 'commerce_license',
   // 'administer flat rate services' => 'commerce_flat_rate',
   // 'administer line item types' => 'commerce_line_item',
   // 'administer line items' => 'commerce_line_item',
