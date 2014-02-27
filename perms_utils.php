@@ -7,17 +7,14 @@ namespace hfc\perms_utils;
  *
  * @param array $perms list of perms to filter
  */
-function filter_inactive_permissions($perms) {
+function filter_inactive_permissions($perms = array()) {
   return array_intersect($perms, array_keys(user_permission_get_modules()));
 }
 
 /**
  * Give all perms for one or more module
  */
-function module_admin($modules = FALSE) {
-  // for stuff we don't want to accidentally hand out
-  $blacklist = array();
-
+function module_admin($modules = FALSE, $blacklist = array()) {
   if ( ! $modules ) return array();
   if ( ! is_array($modules) ) $modules = array($modules);
 
@@ -27,7 +24,7 @@ function module_admin($modules = FALSE) {
       $perms[] = $perm;
     }
   }
-  return $perm;
+  return $perms;
 }
 
 
