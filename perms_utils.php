@@ -230,34 +230,19 @@ function commerce($access_level){
       $perms[] = 'administer commerce_product entities';
 
     case 'store admin':
-      // Customer
-      $perms[] = 'view any commerce_customer_profile entity';
-      $perms[] = 'view any commerce_customer_profile entity of bundle billing';
-      $perms[] = 'view any commerce_customer_profile entity of bundle shipping';
-
       // Discount
       $perms[] = 'administer commerce discounts';
 
       // Flat Rate
       $perms[] = 'administer flat rate services';
 
-      // Line Item
-      $perms[] = 'administer line items';
+      // Customer
+      $perms[] = 'view any commerce_customer_profile entity';
+      $perms[] = 'view any commerce_customer_profile entity of bundle billing';
+      $perms[] = 'view any commerce_customer_profile entity of bundle shipping';
 
-      // Order
-      $perms[] = 'create commerce_order entities';
-      $perms[] = 'view own commerce_order entities';
-      $perms[] = 'view any commerce_order entity';
-      $perms[] = 'create commerce_order entities of bundle commerce_order';
-      $perms[] = 'view own commerce_order entities of bundle commerce_order';
-      $perms[] = 'view any commerce_order entity of bundle commerce_order';
-
-      // Payment
-      $perms[] = 'administer payments';
-      $perms[] = 'view payments';
-      $perms[] = 'create payments';
-      $perms[] = 'update payments';
-      $perms[] = 'delete payments';
+      $perms[] = 'administer line items'; // @todo Are these safe for order manager?
+      $perms[] = 'administer payments'; // @todo Are these safe for order manager?
 
       // Product Pricing UI
       $perms[] = 'administer product pricing';
@@ -270,6 +255,21 @@ function commerce($access_level){
 
       // Wishlist
       $perms[] = 'administer wishlists';
+
+    case 'store order manager':
+      // Order
+      $perms[] = 'create commerce_order entities';
+      $perms[] = 'view own commerce_order entities';
+      $perms[] = 'view any commerce_order entity';
+      $perms[] = 'create commerce_order entities of bundle commerce_order';
+      $perms[] = 'view own commerce_order entities of bundle commerce_order';
+      $perms[] = 'view any commerce_order entity of bundle commerce_order';
+
+      // Payment
+      $perms[] = 'view payments';
+      $perms[] = 'create payments';
+      $perms[] = 'update payments';
+      $perms[] = 'delete payments';
 
     case 'content editor':
       $perms[] = 'create commerce_product entities';
@@ -425,8 +425,8 @@ function pci($access_level) {
   $perms = array();
   switch ($access_level){
     case 'store admin':
+    case 'store order manager':
       $perms[] = 'decrypt payment card data';
-
       break;
     default:
       drupal_set_message(t('@level not valid for @func', array(
