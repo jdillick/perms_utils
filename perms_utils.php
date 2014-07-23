@@ -66,21 +66,29 @@ function module_admin($modules = FALSE, $blacklist = array()) {
  * @param  string $content_type
  * @return array    Array of permissions
  */
-function content($content_type = FALSE) {
+function content($content_types = FALSE) {
   $all_existing_perms = array_keys(user_permission_get_modules());
   $perms = array();
-  foreach ( $all_existing_perms as $perm ) {
-    $patterns = array('create', 'edit own', 'edit any', 'view own', 'view any');
-    foreach ( $patterns as $pattern ) {
-      if ( strpos($perm, $pattern) === 0 ) $perms[] = $perm;
+
+  if ( $content_types && ! is_array($content_types) ) {
+    $content_type = array($content_types);
+  }
+
+  foreach ( $content_types as $content_type ) {
+    foreach ( $all_existing_perms as $perm ) {
+      $patterns = array('create', 'edit own', 'edit any', 'view own', 'view any');
+      foreach ( $patterns as $pattern ) {
+        if ( strpos($perm, $pattern) === 0 ) $perms[] = $perm;
+      }
+    }
+
+    if ( $content_type ) {
+      foreach ( $perms as $i => $perm ) {
+        if ( strpos($perm, $content_type) === FALSE ) unset($perms[$i]);
+      }
     }
   }
 
-  if ( $content_type ) {
-    foreach ( $perms as $i => $perm ) {
-      if ( strpos($perm, $content_type) === FALSE ) unset($perms[$i]);
-    }
-  }
   return $perms;
 }
 
@@ -194,8 +202,12 @@ function content_admin($access_level) {
       $perms[] = 'administer pathauto';
       $perms[] = 'notify of path changes';
 
+      $perms[] = 'edit file';
 
     case 'content editor':
+      // File
+      $perms[] = 'view file';
+
       // Node
       $perms[] = 'administer nodes';
       $perms[] = 'access content overview';
@@ -375,16 +387,13 @@ function feeds($access_level) {
 function workbench($access_level) {
   $perms = array();
   switch ($access_level){
+
     case 'developer':
       $perms[] = 'administer workbench';
-      // Workbench tab is crap
-      // $perms[] = 'access workbench';
 
       // WB Moderation
       $perms[] = 'administer workbench moderation';
       $perms[] = 'bypass workbench moderation';
-      // $perms[] = 'use workbench_moderation my drafts tab';
-      // $perms[] = 'use workbench_moderation needs review tab';
 
     case 'content editor':
       $perms[] = 'view all unpublished content';
@@ -392,10 +401,13 @@ function workbench($access_level) {
       // WB Moderation
       $perms[] = 'view moderation history';
       $perms[] = 'view moderation messages';
+
       // @todo needs to be more dynamic based on what states are available
       // $perms[] = 'moderate content from draft to needs_review';
       // $perms[] = 'moderate content from needs_review to draft';
       // $perms[] = 'moderate content from needs_review to published';
+      $perms[] = 'use workbench_moderation my drafts tab';
+      $perms[] = 'use workbench_moderation needs review tab';
 
       break;
     default:
@@ -558,9 +570,10 @@ function search($access_level) {
   $perms = array();
   switch ($access_level){
     case 'developer':
-      'administer search';
-      'search content';
-      'use advanced search';
+      $perms[] = 'administer search';
+      $perms[] = 'use advanced search';
+    case 'content editor':
+      $perms[] = 'search content';
       break;
 
     default:
@@ -600,8 +613,7 @@ function mailsystem($access_level){
   $perms = array();
   switch ($access_level){
     case 'developer':
-      $perms[] = 'administer mailsystem';
-
+      // $perms[] = 'administer mailsystem';
       break;
     default:
       drupal_set_message(t('@level not valid for @func', array(
@@ -639,7 +651,7 @@ function mimemail($access_level){
   $perms = array();
   switch ($access_level){
     case 'developer':
-      $perms[] = 'edit mimemail user settings';
+      // $perms[] = 'edit mimemail user settings';
 
       break;
     default:
