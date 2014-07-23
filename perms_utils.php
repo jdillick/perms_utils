@@ -1,7 +1,16 @@
 <?php
+/**
+ * @file
+ * perms_utils.php
+ *
+ * Utility functions for managing a dynamic list of permissions for roles.
+ */
 
 namespace hfc\perms_utils;
 
+if ( ! defined(ENVIRONMENT) ) {
+  define(ENVIRONMENT, getenv('ENVTYPE'));
+}
 /**
  * Given a list of permissions, filter out permissions not present on the site.
  *
@@ -9,6 +18,29 @@ namespace hfc\perms_utils;
  */
 function filter_inactive_permissions($perms = array()) {
   return array_intersect($perms, array_keys(user_permission_get_modules()));
+}
+
+/**
+ * Just a stub / noop function.
+ *
+ * @param array $perms list of perms
+ * @return array those same perms back at ya.
+ */
+function parrot($perms = array()) {
+  return $perms;
+}
+
+/**
+ * Get all permissions currently assigned to a role.
+ *
+ * @param string $role role name
+ * @return array of permissions
+ */
+function role($role) {
+  $role_object = user_role_load_by_name($role);
+  $perms = user_role_permissions(array($role_object->rid => 1));
+
+  return array_keys(current($perms));
 }
 
 /**
@@ -724,226 +756,5 @@ function xmlsitemap($access_level){
 }
 
 function is_production() {
-  return getenv('ENVTYPE') && in_array(getenv('ENVTYPE'), array('production', 'staging'));
-}
-
-/**
- * Temporary function... not intended for use.
- * Meant to help brainstorm dynamic permission utilities.
- * @todo remove this after we have good functional perm utilities
- */
-function all_the_perms () {
-  return array (
-  // 'administer blocks' => 'block',
-
-  // 'access all webform results' => 'webform',
-  // 'access own webform results' => 'webform',
-  // 'edit all webform submissions' => 'webform',
-  // 'delete all webform submissions' => 'webform',
-  // 'access own webform submissions' => 'webform',
-  // 'delete own webform submissions' => 'webform',
-
-  // 'administer checkout' => 'commerce_checkout',
-  // 'access checkout' => 'commerce_checkout',
-
-  // 'administer customer profile types' => 'commerce_customer',
-  // 'administer commerce_customer_profile entities' => 'commerce_customer',
-
-  // 'create commerce_customer_profile entities' => 'commerce_customer',
-  // 'view own commerce_customer_profile entities' => 'commerce_customer',
-  // 'view any commerce_customer_profile entity' => 'commerce_customer',
-  // 'create commerce_customer_profile entities of bundle billing' => 'commerce_customer',
-  // 'view own commerce_customer_profile entities of bundle billing' => 'commerce_customer',
-  // 'view any commerce_customer_profile entity of bundle billing' => 'commerce_customer',
-  // 'create commerce_customer_profile entities of bundle shipping' => 'commerce_customer',
-  // 'view own commerce_customer_profile entities of bundle shipping' => 'commerce_customer',
-  // 'view any commerce_customer_profile entity of bundle shipping' => 'commerce_customer',
-
-  // 'administer commerce discounts' => 'commerce_discount',
-  // 'bypass license control' => 'commerce_file',
-  // 'administer licenses' => 'commerce_license',
-  // 'view own licenses' => 'commerce_license',
-  // 'administer flat rate services' => 'commerce_flat_rate',
-  // 'administer line item types' => 'commerce_line_item',
-  // 'administer line items' => 'commerce_line_item',
-
-  // 'administer commerce_order entities' => 'commerce_order',
-  // 'create commerce_order entities' => 'commerce_order',
-  // 'view own commerce_order entities' => 'commerce_order',
-  // 'view any commerce_order entity' => 'commerce_order',
-  // 'create commerce_order entities of bundle commerce_order' => 'commerce_order',
-  // 'view own commerce_order entities of bundle commerce_order' => 'commerce_order',
-  // 'view any commerce_order entity of bundle commerce_order' => 'commerce_order',
-  // 'configure order settings' => 'commerce_order',
-
-  // 'administer payment methods' => 'commerce_payment',
-  // 'administer payments' => 'commerce_payment',
-  // 'view payments' => 'commerce_payment',
-  // 'create payments' => 'commerce_payment',
-  // 'update payments' => 'commerce_payment',
-  // 'delete payments' => 'commerce_payment',
-  // 'administer product types' => 'commerce_product',
-  // 'administer commerce_product entities' => 'commerce_product',
-  // 'create commerce_product entities' => 'commerce_product',
-  // 'view own commerce_product entities' => 'commerce_product',
-  // 'view any commerce_product entity' => 'commerce_product',
-  // 'create commerce_product entities of bundle product' => 'commerce_product',
-  // 'view own commerce_product entities of bundle product' => 'commerce_product',
-  // 'view any commerce_product entity of bundle product' => 'commerce_product',
-
-  // 'administer product pricing' => 'commerce_product_pricing_ui',
-
-  // 'administer shipping' => 'commerce_shipping',
-  // 'administer taxes' => 'commerce_tax_ui',
-  // 'view own wishlist' => 'commerce_wishlist',
-  // 'administer wishlists' => 'commerce_wishlist',
-
-  // 'access contextual links' => 'contextual',
-
-  // 'access dashboard' => 'dashboard',
-
-  // 'administer entity view modes' => 'entity_view_mode',
-
-  // 'administer feeds' => 'feeds',
-  // 'administer feeds_tamper' => 'feeds_tamper',
-
-  // 'administer filters' => 'filter',
-  'use text format filtered_html' => 'filter',
-  'use text format full_html' => 'filter',
-
-  'access forward' => 'forward',
-  'access epostcard' => 'forward',
-  'override email address' => 'forward',
-  'administer forward' => 'forward',
-  'override flood control' => 'forward',
-
-  // 'decrypt payment card data' => 'hfc_commerce_gpg',
-
-  // 'administer image styles' => 'image',
-  // 'administer mailsystem' => 'mailsystem',
-
-  // 'administer menu' => 'menu',
-  // 'import or export menu' => 'menu_import',
-  // 'administer menu positions' => 'menu_position',
-
-  // 'administer meta tags' => 'metatag',
-  // 'edit meta tags' => 'metatag',
-
-  // 'edit mimemail user settings' => 'mimemail',
-
-  // 'administer module filter' => 'module_filter',
-
-  // 'bypass node access' => 'node',
-  // 'administer content types' => 'node',
-  // 'administer nodes' => 'node',
-  // 'access content overview' => 'node',
-  // 'access content' => 'node',
-  // 'view own unpublished content' => 'node',
-  // 'view revisions' => 'node',
-  // 'revert revisions' => 'node',
-  // 'delete revisions' => 'node',
-  // 'create author content' => 'node',
-  // 'delete own author content' => 'node',
-  // 'delete any author content' => 'node',
-  // 'create product_general content' => 'node',
-  // 'delete own product_general content' => 'node',
-  // 'delete any product_general content' => 'node',
-  // 'create article content' => 'node',
-  // 'delete own article content' => 'node',
-  // 'delete any article content' => 'node',
-  // 'create page content' => 'node',
-  // 'delete own page content' => 'node',
-  // 'delete any page content' => 'node',
-  // 'create webform content' => 'node',
-  // 'delete own webform content' => 'node',
-  // 'delete any webform content' => 'node',
-
-  // 'administer url aliases' => 'path',
-  // 'create url aliases' => 'path',
-
-  // 'administer search' => 'search',
-  // 'search content' => 'search',
-  // 'use advanced search' => 'search',
-
-  // 'administer services' => 'services',
-  // 'get any binary files' => 'services',
-  // 'get own binary files' => 'services',
-  // 'save file information' => 'services',
-  // 'get a system variable' => 'services',
-  // 'set a system variable' => 'services',
-  // 'perform unlimited index queries' => 'services',
-
-  // 'administer shortcuts' => 'shortcut',
-  // 'customize shortcut links' => 'shortcut',
-  // 'switch shortcut sets' => 'shortcut',
-
-  // 'administer modules' => 'system',
-  // 'administer site configuration' => 'system',
-  // 'administer themes' => 'system',
-  // 'administer software updates' => 'system',
-
-  // I don't know what this is?? Didn't add it to anything
-  // 'administer actions' => 'system',
-
-  // 'access administration pages' => 'system',
-  // 'access site in maintenance mode' => 'system',
-  // 'view the administration theme' => 'system',
-  // 'access site reports' => 'system',
-  // 'block IP addresses' => 'system',
-
-  // 'administer taxonomy' => 'taxonomy',
-  // 'edit terms in 2' => 'taxonomy',
-  // 'delete terms in 2' => 'taxonomy',
-  // 'edit terms in 3' => 'taxonomy',
-  // 'delete terms in 3' => 'taxonomy',
-  // 'edit terms in 1' => 'taxonomy',
-  // 'delete terms in 1' => 'taxonomy',
-
-  // 'import taxonomy by csv' => 'taxonomy_csv',
-  // 'export taxonomy by csv' => 'taxonomy_csv',
-
-  // 'access toolbar' => 'toolbar',
-
-  // 'administer permissions' => 'user',
-  // 'administer users' => 'user',
-  // 'access user profiles' => 'user',
-  // 'change own username' => 'user',
-  // 'cancel account' => 'user',
-  // 'select account cancellation method' => 'user',
-
-  // 'administer workbench' => 'workbench',
-  // 'access workbench' => 'workbench',
-
-  // 'configure store' => 'commerce',
-
-  // 'administer fieldgroups' => 'field_group',
-
-  // 'administer pathauto' => 'pathauto',
-
-  // 'notify of path changes' => 'pathauto',
-
-  // 'administer xmlsitemap' => 'xmlsitemap',
-
-  // 'view all unpublished content' => 'workbench_moderation',
-  // 'administer workbench moderation' => 'workbench_moderation',
-  // 'bypass workbench moderation' => 'workbench_moderation',
-  // 'view moderation history' => 'workbench_moderation',
-  // 'view moderation messages' => 'workbench_moderation',
-  // 'use workbench_moderation my drafts tab' => 'workbench_moderation',
-  // 'use workbench_moderation needs review tab' => 'workbench_moderation',
-  // 'moderate content from draft to needs_review' => 'workbench_moderation',
-  // 'moderate content from needs_review to draft' => 'workbench_moderation',
-  // 'moderate content from needs_review to published' => 'workbench_moderation',
-
-  // 'administer views' => 'views',
-  // 'access all views' => 'views',
-
-  // 'administer features' => 'features',
-  // 'manage features' => 'features',
-  // 'generate features' => 'features',
-
-  // 'administer rules' => 'rules',
-  // 'bypass rules access' => 'rules',
-  // 'access rules debug' => 'rules',
-);
+  return ENVIRONMENT && in_array(ENVIRONMENT, array('production', 'staging'));
 }
