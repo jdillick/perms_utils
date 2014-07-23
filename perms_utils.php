@@ -26,7 +26,7 @@ function filter_inactive_permissions($perms = array()) {
  * @param array $perms list of perms
  * @return array those same perms back at ya.
  */
-function parrot($perms = array()) {
+function statics($perms = array()) {
   return $perms;
 }
 
@@ -78,13 +78,17 @@ function content($content_types = FALSE) {
     foreach ( $all_existing_perms as $perm ) {
       $patterns = array('create', 'edit own', 'edit any', 'view own', 'view any');
       foreach ( $patterns as $pattern ) {
-        if ( strpos($perm, $pattern) === 0 ) $perms[] = $perm;
+        if ( strpos($perm, $pattern) === 0 ) {
+          $perms[] = $perm;
+        }
       }
     }
 
     if ( $content_type ) {
       foreach ( $perms as $i => $perm ) {
-        if ( strpos($perm, $content_type) === FALSE ) unset($perms[$i]);
+        if ( strpos($perm, $content_type) === FALSE ) {
+          unset($perms[$i]);
+        }
       }
     }
   }
@@ -94,11 +98,18 @@ function content($content_types = FALSE) {
 
 /**
  * Dynamic creation of permissions array based on Taxonomy
- * @todo  Longer description? Examples?
- * @param  string $content_type
- * @return array    Array of permissions
+ * @param  array $arguments (optional) changes behavior of vocabs.
+ *
+ *  To get a flat list of permissions for specific vocabularies,
+ *  pass an arguments array like so:
+ *
+ *  $arguments = array(
+ *    'edit' => array('vocab_machinename1','vocab_machinename2', 'vocab_machinename3',),
+ *    'delete' => array('vocab_machinename3','vocab_machinename4',),
+ *  );
+ * @return array Array of permissions, by default associative by vocab machinename and type
  */
-function vocabs() {
+function vocabs($arguments = array()) {
   $vocabularies = taxonomy_vocabulary_load_multiple(FALSE);
   $vocab_perms = array();
   foreach ( $vocabularies as $vocab ) {
@@ -106,10 +117,23 @@ function vocabs() {
     $vocab_perms[$vocab->machine_name]['edit'] = $perms['administrator'][] = 'edit terms in ' . $vocab->vid;
   }
 
-  // example vocabulary perm
-  // $perms['content editor'][] = $vocab_perms['product_formats']['edit']; // Edit Terms in Product Formats
+  // if no arguments, give the complete list
+  if ( ! $arguments ) {
+    return $vocab_perms;
+  }
 
-  return $vocab_perms;
+  // if arguments are specified, gather all perms that match type and vocab machinename
+  $permissions = array();
+  foreach ( $vocab_perms as $vocab_machine_name => $types ) {
+    foreach ( $types as $type => $perm ) {
+      if ( isset($arguments[$type]) ) {
+        if ( in_array($vocab_machine_name, $arguments[$type]) ) {
+          $permissions[] = $perm;
+        }
+      }
+    }
+  }
+  return $permissions;
 }
 
 
