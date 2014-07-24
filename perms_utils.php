@@ -70,29 +70,32 @@ function content($content_types = FALSE) {
   $all_existing_perms = array_keys(user_permission_get_modules());
   $perms = array();
 
-  if ( $content_types && ! is_array($content_types) ) {
+  if ( ! $content_types ) {
+    return array();
+  }
+
+  if ( ! is_array($content_types) ) {
     $content_type = array($content_types);
   }
 
-  foreach ( $content_types as $content_type ) {
-    foreach ( $all_existing_perms as $perm ) {
-      $patterns = array('create', 'edit own', 'edit any', 'view own', 'view any');
-      foreach ( $patterns as $pattern ) {
-        if ( strpos($perm, $pattern) === 0 ) {
-          $perms[] = $perm;
-        }
-      }
-    }
-
-    if ( $content_type ) {
-      foreach ( $perms as $i => $perm ) {
-        if ( strpos($perm, $content_type) === FALSE ) {
-          unset($perms[$i]);
-        }
+  // Get all content perms
+  foreach ( $all_existing_perms as $perm ) {
+    $patterns = array('create', 'edit own', 'edit any', 'view own', 'view any');
+    foreach ( $patterns as $pattern ) {
+      if ( strpos($perm, $pattern) === 0 ) {
+        $ctperms[] = $perm;
       }
     }
   }
 
+  // Of content perms, gather ones that match my content
+  foreach ( $content_types as $content_type ) {
+    foreach ( $ctperms as $i => $perm ) {
+      if ( strpos($perm, $content_type) !== FALSE ) {
+        $perms[] = $perm;
+      }
+    }
+  }
   return $perms;
 }
 
