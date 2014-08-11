@@ -795,5 +795,5 @@ function xmlsitemap($access_level){
 }
 
 function is_production() {
-  return ENVIRONMENT && in_array(ENVIRONMENT, array('production', 'staging'));
+  return ENVIRONMENT && in_array(ENVIRONMENT, array('prod', 'staging'));
 }
